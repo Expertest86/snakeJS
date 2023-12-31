@@ -76,8 +76,10 @@ function tick(){
         for(let x = 0; x<31; x++){
             for(let y = 0; y<31; y++){
                 if(coord[x][y] > 0){
-                    coord[x][y] = coord[x][y]-1;
-                    fill('lime',x,y);
+                    if((head[0] == apple[0] && head[1] == apple[1]) != true){
+                        coord[x][y] = coord[x][y]-1;
+                    }
+                        fill('lime',x,y);
                       
                 }
                 if(coord[x][y] == 0 && (x != apple[0] || y != apple[1]) ){fill('gray',x,y);}
