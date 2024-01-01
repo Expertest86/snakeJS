@@ -1,7 +1,7 @@
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
 let scoreElement = document.getElementById("score");
-
+let inetrvalId;
 function fill(color,x,y){    
     ctx.fillStyle = color;
     ctx.fillRect(30*x,30*y,30,30);
@@ -11,31 +11,45 @@ function Clear(){
         coord[x]=[];
         for(let y = 0; y<31; y++){
             coord[x][y] = 0;
+            fill('gray',x,y);
         }
     }
 }
+function reset(){
+    Clear();
+    fill('green',14,14);
+    head = [14,14];
+    score = 3;
+    scoreElement.textContent = "Score: " + score;
+    direction = null;
+    spawnApple();
+    clearInterval(inetrvalId);
+    inetrvalId = setInterval(tick,400);
+    coord[14][14]=3;
 
-let direction = 1 
+}
+
+let direction = null 
 document.addEventListener('keydown', (event) => {
     if (event.key == "ArrowLeft" ) { //left
-
-        direction = 1;
-        console.log("left")
+        if(direction != 2){
+            direction = 1;
+        }
     }
     if (event.key == "ArrowRight") { //right
-
-        direction = 2;
-
+        if(direction != 1){
+            direction = 2;
+        }    
     }
     if (event.key == "ArrowUp") { //up
-
-        direction = 3;
-
+        if(direction != 4){
+            direction = 3;
+        }    
     }
     if (event.key == "ArrowDown") { //down
-
-        direction = 4;
-
+        if(direction != 3){
+            direction = 4;
+        }    
     }
 });
 
@@ -58,18 +72,15 @@ function spawnApple() {
 
 
 
-coord[14][14]=2;
+coord[14][14]=3;
 let head = [14,14];
-let score = 5;
+let score = 3;
 scoreElement.textContent = "Score: " + score;
 function tick(){
     console.log('TICK')
     console.log(direction)
     if(head[0]> 29  || head[1] > 29 || head[0]< 0 ||head[1]< 0){
-        head = [14,14];
-        score = 3;
-        scoreElement.textContent = "Score: " + score;
-        Clear()
+        reset();
     }
     if(direction != null){
         console.log(direction)
@@ -79,8 +90,10 @@ function tick(){
                     if((head[0] == apple[0] && head[1] == apple[1]) != true){
                         coord[x][y] = coord[x][y]-1;
                     }
-                        fill('lime',x,y);
-                      
+                        fill('limeGreen',x,y);
+                    if(coord[x][y] == 1){
+                        fill('Chartreuse',x,y);
+                    }
                 }
                 if(coord[x][y] == 0 && (x != apple[0] || y != apple[1]) ){fill('gray',x,y);}
             }
@@ -90,12 +103,11 @@ function tick(){
             score++;
             scoreElement.textContent = "Score: " + score;
             spawnApple();
+            clearInterval(inetrvalId);
+            inetrvalId = setInterval(tick,Math.max(100,4000/(10+score-3)));
         }
         if(head[0]> 29  || head[1] > 29 || head[0]< 0 ||head[1]< 0 || head[0] == null || head[1] == null){
-            head = [14,14];
-            score = 3;
-            scoreElement.textContent = "Score: " + score;
-            Clear()
+            reset();
         }
 
         if(direction == 1 ){ // left
@@ -104,10 +116,7 @@ function tick(){
                 head[0] = head[0]-1;
                 fill('lime',head[0],head[1]);
             } else {
-                head = [14,14];
-                score = 3;
-                scoreElement.textContent = "Score: " + score;
-                Clear()
+                reset();    
             }
 
         } 
@@ -117,10 +126,7 @@ function tick(){
                 head[0] = head[0]+1;
                 fill('lime',head[0],head[1]);
             } else {
-                head = [14,14];
-                score = 3;
-                scoreElement.textContent = "Score: " + score;
-                Clear()
+               reset();
             }
 
         } 
@@ -130,10 +136,7 @@ function tick(){
                 head[1] = head[1]+1;
                 fill('lime',head[0],head[1]);
             } else {
-                head = [14,14];
-                score = 3;
-                scoreElement.textContent = "Score: " + score;
-                Clear()
+                reset();    
             }
 
         } 
@@ -143,10 +146,7 @@ function tick(){
                 head[1] = head[1]-1;
                 fill('lime',head[0],head[1]);
             } else {
-                head = [14,14];
-                score = 3;
-                scoreElement.textContent = "Score: " + score;
-                Clear()
+                reset();
             }    
 
         } 
@@ -164,7 +164,7 @@ function tick(){
 
 
 
-
+fill('green',14,14);
 spawnApple();
-setInterval(tick,400);
+inetrvalId = setInterval(tick,400);
 
