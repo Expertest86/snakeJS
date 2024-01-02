@@ -29,25 +29,26 @@ function reset(){
 
 }
 
-let direction = null 
+let direction = null; 
+let olddirection = null;
 document.addEventListener('keydown', (event) => {
     if (event.key == "ArrowLeft" ) { //left
-        if(direction != 2){
+        if(direction != 2 && olddirection != 2){
             direction = 1;
         }
     }
     if (event.key == "ArrowRight") { //right
-        if(direction != 1){
+        if(direction != 1 && olddirection != 1){
             direction = 2;
         }    
     }
     if (event.key == "ArrowUp") { //up
-        if(direction != 4){
+        if(direction != 4 && olddirection != 4){
             direction = 3;
         }    
     }
     if (event.key == "ArrowDown") { //down
-        if(direction != 3){
+        if(direction != 3 && olddirection != 3){
             direction = 4;
         }    
     }
@@ -74,7 +75,7 @@ function spawnApple() {
 
 coord[14][14]=3;
 let head = [14,14];
-let score = 3;
+let score = 85;
 scoreElement.textContent = "Score: " + score;
 function tick(){
     console.log('TICK')
@@ -94,6 +95,15 @@ function tick(){
                     if(coord[x][y] == 1){
                         fill('Chartreuse',x,y);
                     }
+                    if(coord[x][y] > 78 && coord[x][y] % 2 == 0){
+                        fill('gold',x,y);
+                    }
+                    if(coord[x][y] > 78 && coord[x][y] % 2 == 1){
+                        fill('goldenrod',x,y);
+                    }
+                    if(coord[x][y] > 70 && coord[x][y] <79 ){
+                        fill('goldenrod',x,y);
+                    }
                 }
                 if(coord[x][y] == 0 && (x != apple[0] || y != apple[1]) ){fill('gray',x,y);}
             }
@@ -109,47 +119,50 @@ function tick(){
         if(head[0]> 29  || head[1] > 29 || head[0]< 0 ||head[1]< 0 || head[0] == null || head[1] == null){
             reset();
         }
+        
+            if(direction == 1){ // left
+                if(coord[head[0]-1][head[1]] == 0){    
+                    coord[head[0]-1][head[1]] = score;
+                    head[0] = head[0]-1;
+                    fill('lime',head[0],head[1]);
+                } else {
+                    reset();    
+                }
 
-        if(direction == 1 ){ // left
-            if(coord[head[0]-1][head[1]] == 0){    
-                coord[head[0]-1][head[1]] = score;
-                head[0] = head[0]-1;
-                fill('lime',head[0],head[1]);
-            } else {
-                reset();    
+            } 
+
+            if(direction == 2 ){ // right
+                if(coord[head[0]+1][head[1]] == 0){    
+                    coord[head[0]+1][head[1]] = score;
+                    head[0] = head[0]+1;
+                    fill('lime',head[0],head[1]);
+                } else {
+                   reset();
+                }
+
             }
 
-        } 
-        if(direction == 2 ){ // right
-            if(coord[head[0]+1][head[1]] == 0){    
-                coord[head[0]+1][head[1]] = score;
-                head[0] = head[0]+1;
-                fill('lime',head[0],head[1]);
-            } else {
-               reset();
-            }
+            if(direction == 4 ){ // down
+                if(coord[head[0]][head[1]+1] == 0){    
+                    coord[head[0]][head[1]+1] = score;
+                    head[1] = head[1]+1;
+                    fill('lime',head[0],head[1]);
+                } else {
+                    reset();    
+                }
 
-        } 
-        if(direction == 4 ){ // down
-            if(coord[head[0]][head[1]+1] == 0){    
-                coord[head[0]][head[1]+1] = score;
-                head[1] = head[1]+1;
-                fill('lime',head[0],head[1]);
-            } else {
-                reset();    
-            }
+            } 
 
-        } 
-        if(direction == 3 ){ // up
-            if(coord[head[0]][head[1]-1] == 0){    
-                coord[head[0]][head[1]-1] = score;
-                head[1] = head[1]-1;
-                fill('lime',head[0],head[1]);
-            } else {
-                reset();
-            }    
+            if(direction == 3 ){ // up
+                if(coord[head[0]][head[1]-1] == 0){    
+                    coord[head[0]][head[1]-1] = score;
+                    head[1] = head[1]-1;
+                    fill('lime',head[0],head[1]);
+                } else {
+                    reset();
+                }    
 
-        } 
+            } 
 
 
         
@@ -160,6 +173,7 @@ function tick(){
 
     fill('green',head[0],head[1]);
     }
+    olddirection = direction;
 }
 
 
