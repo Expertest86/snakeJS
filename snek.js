@@ -75,7 +75,7 @@ function spawnApple() {
 
 coord[14][14]=3;
 let head = [14,14];
-let score = 85;
+let score = 3;
 scoreElement.textContent = "Score: " + score;
 function tick(){
     console.log('TICK')
